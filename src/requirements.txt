@@ -4,3 +4,4 @@ urllib3==1.26.6
 aws-wsgi
 flask
 flask-cors
+pydantic
