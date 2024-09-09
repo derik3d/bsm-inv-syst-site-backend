@@ -1,0 +1,5 @@
+openapi: 3.0.0
+info:
+  title: Big Store Managet API
+  description: API for Manage a big store with many things
+  version: 1.0.0
