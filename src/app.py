@@ -7,10 +7,10 @@ from flask import jsonify
 from flask import request
 from flask import send_from_directory
 
-from business_logic_mock import toy_business_logic_list_products
-from business_logic_mock import toy_business_logic_list_a_product
-from business_logic_mock import toy_business_logic_list_orders
-from business_logic_mock import toy_business_logic_list_an_order
+from controller.business_logic_mock import toy_business_logic_list_products
+from controller.business_logic_mock import toy_business_logic_list_a_product
+from controller.business_logic_mock import toy_business_logic_list_orders
+from controller.business_logic_mock import toy_business_logic_list_an_order
 
 app = Flask(__name__)
 CORS(app)
