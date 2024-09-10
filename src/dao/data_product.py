@@ -6,7 +6,7 @@ db_config = {
     'host': 'localhost',
     'user': 'root',
     'password': 'root',
-    'database': 'sfs2x'
+    'database': 'bigstoremanager'
 }
 
 def get_db_connection():
@@ -18,26 +18,85 @@ def get_db_connection():
     )
     return connection
 
-def index():
+def list_products():
     # Connect to the MySQL database
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM user LIMIT 5")
+    cursor.execute("SELECT * FROM product")
     rows = cursor.fetchall()
 
     column_names = [i[0] for i in cursor.description]
     print("Column Names:", column_names)
     # Column Names: ['username', 'pass']
 
-
-    res = {
-        "data" : []
-    }
+    res = []
     
     for row in rows:
-        res["data"].append(row)  # Close the connection
+        res.append(row)  # Close the connection
     cursor.close()
     conn.close()
     
     return res
+
+
+def create_product(data):
+    name = data['name']
+    description = data['description']
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO product (name, description) VALUES (%s, %s)', (name, description))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'Product created successfully!'}), 201
+    except Error as e:
+        return jsonify({'error': str(e)}), 500
+
+def get_product(id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute('SELECT * FROM product WHERE id = %s', (id,))
+        product = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        if product:
+            return jsonify(product), 200
+        else:
+            return jsonify({'message': 'Product not found'}), 404
+    except Error as e:
+        return jsonify({'error': str(e)}), 500
+
+def update_product(id,data):
+    name = data['name']
+    description = data['description']
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('UPDATE product SET name = %s, description = %s WHERE id = %s', (name, description, id))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'Product updated successfully!'}), 200
+    except Error as e:
+        return jsonify({'error': str(e)}), 500
+
+def delete_product(id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM product WHERE id = %s', (id,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        if cursor.rowcount > 0:
+            return jsonify({'message': 'Product deleted successfully!'}), 200
+        else:
+            return jsonify({'message': 'Product not found'}), 404
+    except Error as e:
+        return jsonify({'error': str(e)}), 500
+    

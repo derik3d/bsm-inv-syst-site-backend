@@ -13,8 +13,12 @@ from controller.business_logic_mock import toy_business_logic_list_orders
 from controller.business_logic_mock import toy_business_logic_list_an_order
 
 
-from controller.business_logic import list_products
 from controller.business_logic import list_orders
+from controller.business_logic import list_products
+from controller.business_logic import get_product
+from controller.business_logic import create_product
+from controller.business_logic import update_product
+from controller.business_logic import delete_product
 
 
 app = Flask(__name__)
@@ -66,7 +70,25 @@ def get_products_list():
 @api_key_required ## auth
 def get_a_product(id):
     """ show a product by id"""
-    return toy_business_logic_list_a_product()
+    return get_product(id)
+
+@app.route(_PRODUCTS, methods=["POST"])
+@api_key_required ## auth
+def create_a_product():
+    """ create a product with data"""
+    return create_product(request.json)
+
+@app.route(_PRODUCTS+_BY_ID, methods=["PUT"])
+@api_key_required ## auth
+def update_a_product(id):
+    """ update a product with id and data"""
+    return update_product(id, request.json)
+
+@app.route(_PRODUCTS+_BY_ID, methods=["DELETE"])
+@api_key_required ## auth
+def delete_a_product(id):
+    """ delete product by id"""
+    return delete_product(id)
 
 ###---------------------------------------------------------------------------------
 
@@ -88,6 +110,14 @@ def get_an_order(id):
 def hello():
     """ test hello endpoint """
     return "test hello" , 200
+
+##------------------------------------------------------------------------------------
+
+
+
+
+
+
 
 #####################################################################################3
 
