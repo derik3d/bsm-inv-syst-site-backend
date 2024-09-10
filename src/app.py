@@ -12,6 +12,11 @@ from controller.business_logic_mock import toy_business_logic_list_a_product
 from controller.business_logic_mock import toy_business_logic_list_orders
 from controller.business_logic_mock import toy_business_logic_list_an_order
 
+
+from controller.business_logic import list_products
+from controller.business_logic import list_orders
+
+
 app = Flask(__name__)
 CORS(app)
 
@@ -24,8 +29,8 @@ def api_key_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         api_key = request.headers.get('x-api-key')
-        if api_key != TEMPORARY_API_KEY:
-            return jsonify({'error': 'Unauthorized access >:('}), 403
+        #if api_key != TEMPORARY_API_KEY:
+        #    return jsonify({'error': 'Unauthorized access >:('}), 403
         return f(*args, **kwargs)
     return decorated_function
 
@@ -55,7 +60,7 @@ _GENERAL_ROUTE = "/<path:path>"
 @api_key_required ## auth
 def get_products_list():
     """ list the current products """
-    return toy_business_logic_list_products()
+    return list_products()
 
 @app.route(_PRODUCTS+_BY_ID, methods=["GET"])
 @api_key_required ## auth
@@ -69,7 +74,7 @@ def get_a_product(id):
 @api_key_required ## auth
 def get_orders_list():
     """ list the current orders """
-    return toy_business_logic_list_orders()
+    return list_orders()
 
 @app.route(_ORDERS+_BY_ID, methods=["GET"])
 @api_key_required ## auth
