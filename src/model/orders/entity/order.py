@@ -4,7 +4,7 @@ it traces the orders -state-
 
 """
 
-from typing import Dict, Optional, List
+from typing import Any, Dict, Optional, List
 from pydantic import BaseModel
 
 from model.orders.entity.inventory_item import InventoryItem
@@ -15,8 +15,8 @@ class Order(BaseModel):
     
     #---------------------------------------
     id: str
-    creation: str # timestamp
-    updated: str # timestamp
+    creation: float # timestamp
+    updated: float # timestamp
 
     #---------------------------------------
 
@@ -27,7 +27,7 @@ class Order(BaseModel):
     #---------------------------------------
 
     #client
-    client: Dict[str, any]
+    client_info: Dict[str, Any]
 
     #inventory
     inventory_items :  Optional[List[InventoryItem]] = []

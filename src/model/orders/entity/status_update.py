@@ -5,20 +5,20 @@ an status update, it traces an order status and stores the point in time of an o
 """
 
 from pydantic import BaseModel
-from typing import Dict, Optional
+from typing import Any, Dict
 
 class StatusUpdate(BaseModel):
     """Model for status update entity"""
     #---------------------------------------
     id: str
-    creation: int # creation timestamp
+    creation: float # creation timestamp
 
     #---------------------------------------
     status: str
     description: str
 
     #---------------------------------------
-    order_data: Dict[str, any]
+    order_info: Dict[str, Any]
 
     class Config:
         orm_mode = True

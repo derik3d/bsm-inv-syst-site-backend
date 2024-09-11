@@ -6,7 +6,7 @@ must have a serial number in order to be singular adn traceable
 """
 
 from pydantic import BaseModel
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from model.orders.entity.order import Order
 
@@ -15,7 +15,7 @@ class InventoryItem(BaseModel):
     
     #---------------------------------------
     id: str
-    creation: int # timestamp
+    creation: float # timestamp
     
     #---------------------------------------
     #the product description
@@ -26,12 +26,12 @@ class InventoryItem(BaseModel):
     serial_number: str
 
     # any important data to store
-    additional_info: Optional[Dict[str, any]]
+    additional_info: Optional[Dict[str, Any]]
 
     #---------------------------------------
 
     # try to have up to date order data, an inventory item just have one order
-    order: Optional[Order] = None
+    order_info: Optional[Dict[str, Any]] = None
 
     class Config:
         orm_mode = True
