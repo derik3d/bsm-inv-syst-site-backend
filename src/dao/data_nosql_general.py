@@ -3,6 +3,8 @@ from flask import jsonify
 from bson.objectid import ObjectId
 
 
+
+
 #MongoClient('mongodb://myuser:mypassword@localhost:27017/mydatabase')
 client = MongoClient('mongodb://localhost:27017/')
 db = client.mydatabase  # Create or connect to a database
