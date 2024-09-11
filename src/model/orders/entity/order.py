@@ -7,3 +7,6 @@ class Order(BaseModel):
     product_id: str
     quantity: int
     state: str
+
+    class Config:
+        orm_mode = True
