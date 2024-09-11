@@ -14,8 +14,8 @@ from service.service_logic import InventoryItemService
 
 from model.products.entity.product import Product
 from model.orders.entity.order import Order
-from model.orders.entity.order import StatusUpdate
-from model.orders.entity.order import InventoryItem
+from model.orders.entity.status_update import StatusUpdate
+from model.orders.entity.inventory_item import InventoryItem
 
 
 app = Flask(__name__)
