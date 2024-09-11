@@ -42,12 +42,9 @@ def list_general(collection_name,):
 def get_general(collection_name,obj_id):
     collection = db[collection_name]
 
-    print(id)
-
     try:
         # Find the document by _id
         document = collection.find_one({"_id": ObjectId(obj_id)})
-        print((document))
 
         if document:
             convert_object_ids_to_str(document)
