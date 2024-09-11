@@ -43,6 +43,21 @@ def list_products():
     # Convert to JSON and return
     return res
 
+def get_product(id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute('SELECT * FROM product WHERE id = %s', (id,))
+        product = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        if product:
+            return jsonify(product), 200
+        else:
+            return jsonify({'message': 'Product not found'}), 404
+    except Error as e:
+        return jsonify({'error': str(e)}), 500
+
 
 def create_product(data):
     name = data['name']
@@ -56,21 +71,6 @@ def create_product(data):
         cursor.close()
         conn.close()
         return jsonify({'message': 'Product created successfully!'}), 201
-    except Error as e:
-        return jsonify({'error': str(e)}), 500
-
-def get_product(id):
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute('SELECT * FROM product WHERE id = %s', (id,))
-        product = cursor.fetchone()
-        cursor.close()
-        conn.close()
-        if product:
-            return jsonify(product), 200
-        else:
-            return jsonify({'message': 'Product not found'}), 404
     except Error as e:
         return jsonify({'error': str(e)}), 500
 
