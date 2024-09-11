@@ -8,8 +8,6 @@ must have a serial number in order to be singular adn traceable
 from pydantic import BaseModel
 from typing import Any, Dict, Optional
 
-from model.orders.entity.order import Order
-
 class InventoryItem(BaseModel):
     """Model for inventory item entity"""
     

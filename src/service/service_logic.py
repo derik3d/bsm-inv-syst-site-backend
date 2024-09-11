@@ -35,7 +35,7 @@ class ProductService:
 #ORDERS
 class OrderService:
 
-    COLLECTION_NAME = "order"
+    COLLECTION_NAME = "orders"
 
     @staticmethod
     def list_orders():
@@ -64,7 +64,7 @@ class OrderService:
 
 class StatusUpdateService:
 
-    COLLECTION_NAME = "status"
+    COLLECTION_NAME = "status_updates"
 
     @staticmethod
     def list_statuss():
@@ -94,7 +94,7 @@ class StatusUpdateService:
 
 class InventoryItemService:
 
-    COLLECTION_NAME = "inventory_item"
+    COLLECTION_NAME = "inventory_items"
 
     @staticmethod
     def list_inventory_items():

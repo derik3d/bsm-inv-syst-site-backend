@@ -7,9 +7,24 @@ from bson.objectid import ObjectId
 
 #MongoClient('mongodb://myuser:mypassword@localhost:27017/mydatabase')
 client = MongoClient('mongodb://localhost:27017/')
-db = client.mydatabase  # Create or connect to a database
+db = client.bigstoremanager  # Create or connect to a database
 
 # Collection (table equivalent in SQL)
+
+
+def convert_object_ids_to_str(document):
+    """
+    Recursively convert all ObjectId fields in the document to strings.
+    """
+    if isinstance(document, dict):
+        for key, value in document.items():
+            if isinstance(value, ObjectId):
+                document[key] = str(value)
+            elif isinstance(value, dict) or isinstance(value, list):
+                convert_object_ids_to_str(value)
+    elif isinstance(document, list):
+        for index in range(len(document)):
+            convert_object_ids_to_str(document[index])
 
 
 # List all orders
@@ -18,8 +33,9 @@ def list_general(collection_name,):
     documents = []
     # Retrieve all documents from the collection
     for document in collection.find():
-        document['_id'] = str(document['_id'])  # Convert ObjectId to string
+        convert_object_ids_to_str(document)  # Convert ObjectId to string
         documents.append(document)
+
     return jsonify(documents)
 
 # Get a specific order by ID
