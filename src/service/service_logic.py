@@ -3,19 +3,37 @@
 import dao.data_product as data_products
 import dao.data_nosql_general as data_general
 
+#PRODUCTTYPES
+class ProductTypeService:
+
+
+    TABLE_NAME = "product_type"
+
+    @staticmethod
+    def list_product_types():
+        """crud product """
+        return data_products.list_general(ProductTypeService.TABLE_NAME)
+
+    @staticmethod
+    def get_product_type(id):
+        """crud product type"""
+        return data_products.get_general(ProductTypeService.TABLE_NAME,id)
+    
 
 #PRODUCTS
 class ProductService:
 
+    TABLE_NAME = "product"
+
     @staticmethod
     def list_products():
         """crud product """
-        return data_products.list_products()
+        return data_products.list_general(ProductService.TABLE_NAME)
 
     @staticmethod
     def get_product(id):
         """crud product """
-        return data_products.get_product(id)
+        return data_products.get_general(ProductService.TABLE_NAME,id)
 
     @staticmethod
     def create_product(body):

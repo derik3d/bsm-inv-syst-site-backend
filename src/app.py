@@ -8,11 +8,16 @@ from flask import request
 from flask import send_from_directory
 
 from service.service_logic import ProductService
+from service.service_logic import ProductTypeService
+
+from model.products.entity.product import Product
+from model.products.entity.product_type import ProductType
+
+
 from service.service_logic import OrderService
 from service.service_logic import StatusUpdateService
 from service.service_logic import InventoryItemService
 
-from model.products.entity.product import Product
 from model.orders.entity.order import Order
 from model.orders.entity.status_update import StatusUpdate
 from model.orders.entity.inventory_item import InventoryItem
@@ -48,6 +53,7 @@ def openapi_spec():
 
 ##########################################################################
 _PRODUCTS = "/products"
+_PRODUCTTYPES = "/product-types"
 _ORDERS = "/orders"
 _STATUS = "/status"
 _INVENTORYITEMS = "/inventory-items"
@@ -58,6 +64,20 @@ _BY_ID = "/<id>"
 _GENERAL_ROUTE = "/<path:path>"
 
 ###--------------------------------------PRODUCT-------------------------------------------
+
+@app.route(_PRODUCTTYPES, methods=["GET"])
+@api_key_required ## auth
+def ep_list_product_types():
+    """ list the current products """
+    return ProductTypeService.list_product_types()
+
+@app.route(_PRODUCTTYPES+_BY_ID, methods=["GET"])
+@api_key_required ## auth
+def ep_get_product_type(id):
+    """ show a product by id"""
+    return ProductTypeService.get_product_type(id)
+
+#--------------------------------------------------
 
 @app.route(_PRODUCTS, methods=["GET"])
 @api_key_required ## auth

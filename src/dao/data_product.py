@@ -18,12 +18,12 @@ def get_db_connection():
     )
     return connection
 
-def list_products():
+def list_general(table):
     # Connect to the MySQL database
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM product")
+    cursor.execute(f"SELECT * FROM {table}")
     rows = cursor.fetchall()
 
     column_names = [i[0] for i in cursor.description]
@@ -43,11 +43,11 @@ def list_products():
     # Convert to JSON and return
     return res
 
-def get_product(id):
+def get_general(table,id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute('SELECT * FROM product WHERE id = %s', (id,))
+        cursor.execute('SELECT * FROM '+ table +' WHERE id = %s', (id,))
         product = cursor.fetchone()
         cursor.close()
         conn.close()
