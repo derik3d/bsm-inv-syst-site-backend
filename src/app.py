@@ -7,20 +7,11 @@ from flask import jsonify
 from flask import request
 from flask import send_from_directory
 
-from controller.business_logic_mock import toy_business_logic_list_an_order
+from service.service_logic import ProductService
+from service.service_logic import OrderService
 
-
-from controller.business_logic import list_products
-from controller.business_logic import get_product
-from controller.business_logic import create_product
-from controller.business_logic import update_product
-from controller.business_logic import delete_product
-
-from controller.business_logic import list_orders
-from controller.business_logic import get_order
-from controller.business_logic import create_order
-from controller.business_logic import update_order
-from controller.business_logic import delete_order
+from model.products.entity.product import Product
+from model.orders.entity.order import Order
 
 
 app = Flask(__name__)
@@ -66,31 +57,33 @@ _GENERAL_ROUTE = "/<path:path>"
 @api_key_required ## auth
 def ep_list_products():
     """ list the current products """
-    return list_products()
+    return ProductService.list_products()
 
 @app.route(_PRODUCTS+_BY_ID, methods=["GET"])
 @api_key_required ## auth
 def ep_get_product(id):
     """ show a product by id"""
-    return get_product(id)
+    return ProductService.get_product(id)
 
 @app.route(_PRODUCTS, methods=["POST"])
 @api_key_required ## auth
 def ep_create_product():
     """ create a product with data"""
-    return create_product(request.json)
+    product = Product(**request.json)
+    return ProductService.create_product(product)
 
 @app.route(_PRODUCTS+_BY_ID, methods=["PUT"])
 @api_key_required ## auth
 def ep_update_product(id):
     """ update a product with id and data"""
-    return update_product(id, request.json)
+    product = Product(**request.json)
+    return ProductService.update_product(id, product)
 
 @app.route(_PRODUCTS+_BY_ID, methods=["DELETE"])
 @api_key_required ## auth
 def ep_delete_product(id):
     """ delete product by id"""
-    return delete_product(id)
+    return ProductService.delete_product(id)
 
 ###---------------------------------------------------------------------------------
 
@@ -99,31 +92,33 @@ def ep_delete_product(id):
 @api_key_required ## auth
 def ep_list_orders():
     """ list the current orders """
-    return list_orders()
+    return OrderService.list_orders()
 
 @app.route(_ORDERS+_BY_ID, methods=["GET"])
 @api_key_required ## auth
 def ep_get_order(id):
     """ show a order by id"""
-    return get_order(id)
+    return OrderService.get_order(id)
 
 @app.route(_ORDERS, methods=["POST"])
 @api_key_required ## auth
 def ep_create_order():
     """ create a order with data"""
-    return create_order(request.json)
+    order = Order(**request.json)
+    return OrderService.create_order(order)
 
 @app.route(_ORDERS+_BY_ID, methods=["PUT"])
 @api_key_required ## auth
 def ep_update_order(id):
     """ update a order with id and data"""
-    return update_order(id, request.json)
+    order = Order(**request.json)
+    return OrderService.update_order(id, order)
 
 @app.route(_ORDERS+_BY_ID, methods=["DELETE"])
 @api_key_required ## auth
 def ep_delete_order(id):
     """ delete order by id"""
-    return delete_order(id)
+    return OrderService.delete_order(id)
 
 ###---------------------------------------------------------------------------------
 
