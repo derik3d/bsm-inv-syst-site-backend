@@ -29,7 +29,6 @@ INSERT INTO product_type (type_name, nemo, parent_type_id) VALUES
 ('web signed contract', 'WSC', 3),
 ('personal signed contract', 'PSC', 3);
 
--- Insert example data into product table
 INSERT INTO product (product_name, product_description, fk_product_type_id) VALUES
 ('Smartphone', 'A high-end smartphone with advanced features for client fidelization.', 1),
 ('Big dataphone', 'Old type dataphone.', 4),
