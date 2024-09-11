@@ -9,9 +9,13 @@ from flask import send_from_directory
 
 from service.service_logic import ProductService
 from service.service_logic import OrderService
+from service.service_logic import StatusUpdateService
+from service.service_logic import InventoryItemService
 
 from model.products.entity.product import Product
 from model.orders.entity.order import Order
+from model.orders.entity.order import StatusUpdate
+from model.orders.entity.order import InventoryItem
 
 
 app = Flask(__name__)
@@ -45,13 +49,15 @@ def openapi_spec():
 ##########################################################################
 _PRODUCTS = "/products"
 _ORDERS = "/orders"
+_STATUS = "/status"
+_INVENTORYITEMS = "/inventory-items"
 _HELLO = "/hello"
 
 _BY_ID = "/<id>"
 
 _GENERAL_ROUTE = "/<path:path>"
 
-###---------------------------------------------------------------------------------
+###--------------------------------------PRODUCT-------------------------------------------
 
 @app.route(_PRODUCTS, methods=["GET"])
 @api_key_required ## auth
@@ -85,7 +91,7 @@ def ep_delete_product(id):
     """ delete product by id"""
     return ProductService.delete_product(id)
 
-###---------------------------------------------------------------------------------
+###-----------------------------------------ORDER----------------------------------------
 
 
 @app.route(_ORDERS, methods=["GET"])
@@ -119,6 +125,76 @@ def ep_update_order(id):
 def ep_delete_order(id):
     """ delete order by id"""
     return OrderService.delete_order(id)
+
+###-----------------------------------------INVENTORYITEM----------------------------------------
+
+
+@app.route(_INVENTORYITEMS, methods=["GET"])
+@api_key_required ## auth
+def ep_list_inventory_items():
+    """ list the current inventory items """
+    return InventoryItemService.list_inventory_items()
+
+@app.route(_INVENTORYITEMS+_BY_ID, methods=["GET"])
+@api_key_required ## auth
+def ep_get_inventory_item(id):
+    """ show a inventory item by id"""
+    return InventoryItemService.get_inventory_item(id)
+
+@app.route(_INVENTORYITEMS, methods=["POST"])
+@api_key_required ## auth
+def ep_create_inventory_item():
+    """ create a inventory item with data"""
+    inventory_item = InventoryItem(**request.json)
+    return InventoryItemService.create_inventory_item(inventory_item)
+
+@app.route(_INVENTORYITEMS+_BY_ID, methods=["PUT"])
+@api_key_required ## auth
+def ep_update_inventory_item(id):
+    """ update a inventory item with id and data"""
+    inventory_item = InventoryItem(**request.json)
+    return InventoryItemService.update_inventory_item(id, inventory_item)
+
+@app.route(_INVENTORYITEMS+_BY_ID, methods=["DELETE"])
+@api_key_required ## auth
+def ep_delete_inventory_item(id):
+    """ delete inventory item by id"""
+    return InventoryItemService.delete_inventory_item(id)
+
+###-----------------------------------------STATUS----------------------------------------
+
+
+@app.route(_STATUS, methods=["GET"])
+@api_key_required ## auth
+def ep_list_status():
+    """ list the current statuss """
+    return StatusUpdateService.list_statuss()
+
+@app.route(_STATUS+_BY_ID, methods=["GET"])
+@api_key_required ## auth
+def ep_get_status(id):
+    """ show a status by id"""
+    return StatusUpdateService.get_status(id)
+
+@app.route(_STATUS, methods=["POST"])
+@api_key_required ## auth
+def ep_create_status():
+    """ create a status with data"""
+    status = StatusUpdate(**request.json)
+    return StatusUpdateService.create_status(status)
+
+@app.route(_STATUS+_BY_ID, methods=["PUT"])
+@api_key_required ## auth
+def ep_update_status(id):
+    """ update a status with id and data"""
+    status = StatusUpdate(**request.json)
+    return StatusUpdateService.update_status(id, status)
+
+@app.route(_STATUS+_BY_ID, methods=["DELETE"])
+@api_key_required ## auth
+def ep_delete_status(id):
+    """ delete status by id"""
+    return StatusUpdateService.delete_status(id)
 
 ###---------------------------------------------------------------------------------
 
