@@ -28,15 +28,19 @@ def list_products():
 
     column_names = [i[0] for i in cursor.description]
     print("Column Names:", column_names)
-    # Column Names: ['username', 'pass']
 
     res = []
     
     for row in rows:
-        res.append(row)  # Close the connection
+        # Create a dictionary for each row
+        row_dict = dict(zip(column_names, row))
+        res.append(row_dict)
+    
+    # Close the connection
     cursor.close()
     conn.close()
     
+    # Convert to JSON and return
     return res
 
 
