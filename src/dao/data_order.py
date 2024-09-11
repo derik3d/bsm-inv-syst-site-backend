@@ -8,11 +8,11 @@ client = MongoClient('mongodb://localhost:27017/')
 db = client.mydatabase  # Create or connect to a database
 
 # Collection (table equivalent in SQL)
-collection = db.mycollection
 
 
 # List all orders
-def list_orders():
+def list_general(collection_name,):
+    collection = db[collection_name]
     documents = []
     # Retrieve all documents from the collection
     for document in collection.find():
@@ -21,7 +21,8 @@ def list_orders():
     return jsonify(documents)
 
 # Get a specific order by ID
-def get_order(id):
+def get_general(collection_name,id):
+    collection = db[collection_name]
     try:
         # Find the document by _id
         document = collection.find_one({"_id": ObjectId(id)})
@@ -34,7 +35,8 @@ def get_order(id):
         return jsonify({'error': str(e)})
 
 # Create a new order
-def create_order(body):
+def create_general(collection_name,body):
+    collection = db[collection_name]
     try:
         # Insert the document into the collection
         result = collection.insert_one(jsonify(body))
@@ -43,7 +45,8 @@ def create_order(body):
         return jsonify({'error': str(e)})
 
 # Update an existing order by ID
-def update_order(id,body):
+def update_general(collection_name,id,body):
+    collection = db[collection_name]
     try:
         result = collection.update_one({"_id": ObjectId(id)}, {"$set": jsonify(body)})
         
@@ -54,7 +57,8 @@ def update_order(id,body):
         return jsonify({'error': str(e)})
 
 # Delete an order by ID
-def delete_order(id):
+def delete_general(collection_name,id):
+    collection = db[collection_name]
     try:
         # Delete the document from the collection
         result = collection.delete_one({"_id": ObjectId(id)})
