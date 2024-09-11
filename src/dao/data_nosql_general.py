@@ -39,14 +39,19 @@ def list_general(collection_name,):
     return jsonify(documents)
 
 # Get a specific order by ID
-def get_general(collection_name,id):
+def get_general(collection_name,obj_id):
     collection = db[collection_name]
+
+    print(id)
+
     try:
         # Find the document by _id
-        document = collection.find_one({"_id": ObjectId(id)})
+        document = collection.find_one({"_id": ObjectId(obj_id)})
+        print((document))
+
         if document:
-            document['_id'] = str(document['_id'])  # Convert ObjectId to string
-            return jsonify(document), 200
+            convert_object_ids_to_str(document)
+            return document
         else:
             return jsonify({'error': 'Document not found'})
     except Exception as e:
@@ -54,6 +59,7 @@ def get_general(collection_name,id):
 
 # Create a new order
 def create_general(collection_name,body):
+    """deletes a document with a body"""
     collection = db[collection_name]
     try:
         # Insert the document into the collection
@@ -63,10 +69,11 @@ def create_general(collection_name,body):
         return jsonify({'error': str(e)})
 
 # Update an existing order by ID
-def update_general(collection_name,id,body):
+def update_general(collection_name,obj_id,body):
+    """updated a document with _id, and body"""
     collection = db[collection_name]
     try:
-        result = collection.update_one({"_id": ObjectId(id)}, {"$set": jsonify(body)})
+        result = collection.update_one({"_id": ObjectId(obj_id)}, {"$set": jsonify(body)})
         
         if result.matched_count == 0:
             return jsonify({'error': 'Document not found'})
@@ -75,11 +82,12 @@ def update_general(collection_name,id,body):
         return jsonify({'error': str(e)})
 
 # Delete an order by ID
-def delete_general(collection_name,id):
+def delete_general(collection_name,obj_id):
+    """deletes a document with _id"""
     collection = db[collection_name]
     try:
         # Delete the document from the collection
-        result = collection.delete_one({"_id": ObjectId(id)})
+        result = collection.delete_one({"_id": ObjectId(obj_id)})
         
         if result.deleted_count == 0:
             return jsonify({'error': 'Document not found'})
