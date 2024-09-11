@@ -13,7 +13,7 @@ CREATE TABLE product (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_name TEXT NOT NULL,
     product_description TEXT NOT NULL,
-    fk_product_type_id INT,
+    fk_product_type_id INT NOT NULL,
     FOREIGN KEY (fk_product_type_id) REFERENCES product_type(id)
 );
 
