@@ -5,7 +5,6 @@ must have a serial number in order to be singular adn traceable
 
 """
 
-
 from pydantic import BaseModel
 from typing import Dict, Optional
 

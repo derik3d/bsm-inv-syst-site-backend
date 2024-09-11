@@ -5,7 +5,7 @@ an status update, it traces an order status and stores the point in time of an o
 """
 
 from pydantic import BaseModel
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 class StatusUpdate(BaseModel):
     """Model for status update entity"""
