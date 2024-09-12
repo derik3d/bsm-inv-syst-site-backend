@@ -72,16 +72,9 @@ def execute_query(query,values=None,fetch=0):
             cursor.execute(query,values)
             result = cursor.fetchone()
         if fetch==2:
-            cursor = conn.cursor()
+            cursor = conn.cursor(dictionary=True)
             cursor.execute(query)
-            rows = cursor.fetchall()
-            column_names = [i[0] for i in cursor.description]
-            print("Column Names:", column_names)
-            result = []
-            for row in rows:
-                # Create a dictionary for each row
-                row_dict = dict(zip(column_names, row))
-                result.append(row_dict)
+            result = cursor.fetchall()
 
         cursor.close()
         conn.close()
