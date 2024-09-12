@@ -55,7 +55,7 @@ def update_product(id,data):
 
 def delete_product(id):
     query = 'DELETE FROM product WHERE id = %s'
-    values = id
+    values = (id,)
     execute_query(query,values)
     return jsonify({'message': 'Product deleted'}), 201
 
