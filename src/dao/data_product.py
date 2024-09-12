@@ -55,23 +55,28 @@ def get_general(table,id):
             return jsonify(product), 200
         else:
             return jsonify({'message': 'Product not found'}), 404
-    except Error as e:
+    except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 
-def create_product(data):
-    name = data['name']
-    description = data['description']
+def create_product(data):    
+    product_name = data.model_dump()['product_name']
+    product_description = data.model_dump()['product_description']
+    fk_product_type_id = data.model_dump()['fk_product_type_id']
+    #fk_product_type_id
     
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO product (name, description) VALUES (%s, %s)', (name, description))
+
+        query = 'INSERT INTO product (product_name, product_description, fk_product_type_id) VALUES (%s, %s, %s)'
+
+        cursor.execute(query, (product_name, product_description,fk_product_type_id))
         conn.commit()
         cursor.close()
         conn.close()
         return jsonify({'message': 'Product created successfully!'}), 201
-    except Error as e:
+    except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 def update_product(id,data):
@@ -86,7 +91,7 @@ def update_product(id,data):
         cursor.close()
         conn.close()
         return jsonify({'message': 'Product updated successfully!'}), 200
-    except Error as e:
+    except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 def delete_product(id):
@@ -101,6 +106,6 @@ def delete_product(id):
             return jsonify({'message': 'Product deleted successfully!'}), 200
         else:
             return jsonify({'message': 'Product not found'}), 404
-    except Error as e:
+    except Exception as e:
         return jsonify({'error': str(e)}), 500
     
