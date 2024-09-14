@@ -3,12 +3,11 @@ from flask import jsonify
 from bson.objectid import ObjectId
 import json
 
-#MongoClient('mongodb://myuser:mypassword@localhost:27017/mydatabase')
-client = MongoClient('mongodb://localhost:27017/')
+# MongoClient('mongodb://myuser:mypassword@localhost:27017/mydatabase')
+client = MongoClient("mongodb://localhost:27017/")
 db = client.bigstoremanager  # Create or connect to a database
 
 # Collection (table equivalent in SQL)
-
 
 
 def convert_object_ids_to_str(document):
@@ -17,10 +16,10 @@ def convert_object_ids_to_str(document):
     and change '_id' to 'id'.
     """
     if isinstance(document, dict):
-        if '_id' in document and isinstance(document['_id'], ObjectId):
+        if "_id" in document and isinstance(document["_id"], ObjectId):
             # Rename '_id' to 'id' and convert ObjectId to string
-            document['id'] = str(document.pop('_id'))
-        
+            document["id"] = str(document.pop("_id"))
+
         # Recursively convert any nested dictionaries or lists
         for key, value in document.items():
             if isinstance(value, (dict, list)):
@@ -33,7 +32,9 @@ def convert_object_ids_to_str(document):
 
 
 # List all orders
-def list_general(collection_name,):
+def list_general(
+    collection_name,
+):
     collection = db[collection_name]
     documents = []
     # Retrieve all documents from the collection
@@ -42,8 +43,9 @@ def list_general(collection_name,):
         documents.append(document)
     return jsonify(documents)
 
+
 # Get a specific order by ID
-def get_general(collection_name,obj_id):
+def get_general(collection_name, obj_id):
     collection = db[collection_name]
 
     try:
@@ -55,44 +57,49 @@ def get_general(collection_name,obj_id):
             print(document)
             return document
         else:
-            return jsonify({'error': 'Document not found'})
+            return jsonify({"error": "Document not found"})
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({"error": str(e)})
+
 
 # Create a new order
-def create_general(collection_name,body):
+def create_general(collection_name, body):
     """deletes a document with a body"""
     collection = db[collection_name]
     try:
         # Insert the document into the collection
         result = collection.insert_one(jsonify(body))
-        return jsonify({'status': 'Document added', 'id': str(result.inserted_id)})
+        return jsonify({"status": "Document added", "id": str(result.inserted_id)})
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({"error": str(e)})
+
 
 # Update an existing order by ID
-def update_general(collection_name,obj_id,body):
+def update_general(collection_name, obj_id, body):
     """updated a document with _id, and body"""
     collection = db[collection_name]
     try:
-        result = collection.update_one({"_id": ObjectId(obj_id)}, {"$set": jsonify(body)})
-        
+        result = collection.update_one(
+            {"_id": ObjectId(obj_id)}, {"$set": jsonify(body)}
+        )
+
         if result.matched_count == 0:
-            return jsonify({'error': 'Document not found'})
-        return jsonify({'status': 'Document updated'})
+            return jsonify({"error": "Document not found"})
+        return jsonify({"status": "Document updated"})
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({"error": str(e)})
+
 
 # Delete an order by ID
-def delete_general(collection_name,obj_id):
+def delete_general(collection_name, obj_id):
     """deletes a document with _id"""
     collection = db[collection_name]
     try:
         # Delete the document from the collection
         result = collection.delete_one({"_id": ObjectId(obj_id)})
-        
+
         if result.deleted_count == 0:
-            return jsonify({'error': 'Document not found'})
-        return jsonify({'status': 'Document deleted'})
+            return jsonify({"error": "Document not found"})
+        return jsonify({"status": "Document deleted"})
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({"error": str(e)})
