@@ -68,7 +68,7 @@ class ProductService:
 
 # ORDERS
 class OrderService:
-    """logic class for orders """
+    """logic class for orders"""
 
     COLLECTION_NAME = "orders"
 
@@ -99,7 +99,7 @@ class OrderService:
 
 
 class StatusUpdateService:
-    """logic class for status """
+    """logic class for status"""
 
     COLLECTION_NAME = "status_updates"
 
@@ -132,7 +132,7 @@ class StatusUpdateService:
 
 
 class InventoryItemService:
-    """logic class for inventory item """
+    """logic class for inventory item"""
 
     COLLECTION_NAME = "inventory_items"
 

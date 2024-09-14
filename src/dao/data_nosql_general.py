@@ -1,9 +1,7 @@
 from pymongo import MongoClient
 from flask import jsonify
 from bson.objectid import ObjectId
-
-
-
+import json
 
 #MongoClient('mongodb://myuser:mypassword@localhost:27017/mydatabase')
 client = MongoClient('mongodb://localhost:27017/')
@@ -12,17 +10,24 @@ db = client.bigstoremanager  # Create or connect to a database
 # Collection (table equivalent in SQL)
 
 
+
 def convert_object_ids_to_str(document):
     """
-    Recursively convert all ObjectId fields in the document to strings.
+    Recursively convert all ObjectId fields in the document to strings
+    and change '_id' to 'id'.
     """
     if isinstance(document, dict):
+        if '_id' in document and isinstance(document['_id'], ObjectId):
+            # Rename '_id' to 'id' and convert ObjectId to string
+            document['id'] = str(document.pop('_id'))
+        
+        # Recursively convert any nested dictionaries or lists
         for key, value in document.items():
-            if isinstance(value, ObjectId):
-                document[key] = str(value)
-            elif isinstance(value, dict) or isinstance(value, list):
+            if isinstance(value, (dict, list)):
                 convert_object_ids_to_str(value)
+
     elif isinstance(document, list):
+        # If the document is a list, iterate through each item
         for index in range(len(document)):
             convert_object_ids_to_str(document[index])
 
@@ -35,7 +40,6 @@ def list_general(collection_name,):
     for document in collection.find():
         convert_object_ids_to_str(document)  # Convert ObjectId to string
         documents.append(document)
-
     return jsonify(documents)
 
 # Get a specific order by ID
@@ -48,6 +52,7 @@ def get_general(collection_name,obj_id):
 
         if document:
             convert_object_ids_to_str(document)
+            print(document)
             return document
         else:
             return jsonify({'error': 'Document not found'})
