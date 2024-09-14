@@ -77,6 +77,26 @@ def ep_get_product_type(id):
     """ show a product by id"""
     return ProductTypeService.get_product_type(id)
 
+@app.route(_PRODUCTTYPES, methods=["POST"])
+@api_key_required ## auth
+def ep_create_product_type():
+    """ create a product type with data"""
+    product = ProductType(**request.json)
+    return ProductTypeService.create_product_type(product)
+
+@app.route(_PRODUCTTYPES+_BY_ID, methods=["PUT"])
+@api_key_required ## auth
+def ep_update_product_type(id):
+    """ update a product type with id and data"""
+    product = ProductType(**request.json)
+    return ProductTypeService.update_product_type(id, product)
+
+@app.route(_PRODUCTTYPES+_BY_ID, methods=["DELETE"])
+@api_key_required ## auth
+def ep_delete_product_type(id):
+    """ delete product type by id"""
+    return ProductTypeService.delete_product_type(id)
+
 #--------------------------------------------------
 
 @app.route(_PRODUCTS, methods=["GET"])
