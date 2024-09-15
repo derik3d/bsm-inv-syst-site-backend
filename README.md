@@ -11,3 +11,8 @@ developed on python with flask
 communication with 2 dvs
 - mysql -> products description
 - mongodb -> products management
+
+
+ng serve -> open app to view on chrome
+mongod -> start mongo
+python3.12 app.py or on app rightclick run python run file in terminal
