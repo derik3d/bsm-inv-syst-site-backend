@@ -9,8 +9,6 @@ from bson import ObjectId
 from pydantic import BaseModel, Field, field_validator
 from typing import Any, Dict, Optional
 
-from model.orders.entity.object_id import PyObjectId
-
 class InventoryItem(BaseModel):
     """Model for inventory item entity"""
     

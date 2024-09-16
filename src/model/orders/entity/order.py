@@ -10,7 +10,6 @@ from pydantic import BaseModel, Field, field_validator
 
 from model.orders.entity.inventory_item import InventoryItem
 from model.orders.entity.status_update import StatusUpdate
-from model.orders.entity.object_id import PyObjectId
 
 
 class Order(BaseModel):
