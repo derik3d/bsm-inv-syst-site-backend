@@ -9,4 +9,4 @@ class ProductType(BaseModel):
     parent_type_id: Optional[int] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

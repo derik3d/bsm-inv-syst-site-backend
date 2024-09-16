@@ -8,4 +8,4 @@ class Product(BaseModel):
     fk_product_type_id: int  # Foreign key reference to the product type
 
     class Config:
-        orm_mode = True
+        from_attributes = True
