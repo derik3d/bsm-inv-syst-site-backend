@@ -1,24 +1,27 @@
-"""
-
-an status update, it traces an order status and stores the point in time of an order
-
-"""
-
-from pydantic import BaseModel
-from typing import Any, Dict
+from pydantic import BaseModel, Field, field_validator
+from bson import ObjectId
+from typing import Optional
 
 class StatusUpdate(BaseModel):
     """Model for status update entity"""
-    #---------------------------------------
-    id: str
-    creation: float # creation timestamp
-
-    #---------------------------------------
+    
+    id: Optional[str] = Field(default_factory=ObjectId, alias="_id")
+    creation: float  # creation timestamp
     status: str
     description: str
+    order_info: str
+
 
     #---------------------------------------
-    order_info: Dict[str, Any]
+
+    @field_validator("id", mode="before", check_fields=False)
+    def convert_objectid_to_str(cls, v):
+        if isinstance(v, ObjectId):
+            return str(v)
+        return v
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+        populate_by_name = True
+        json_encoders = {ObjectId: str}
+        arbitrary_types_allowed = True

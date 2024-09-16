@@ -3,6 +3,8 @@ from flask import jsonify
 from bson.objectid import ObjectId
 import json
 
+from model.orders.entity.status_update import StatusUpdate
+
 # MongoClient('mongodb://myuser:mypassword@localhost:27017/mydatabase')
 client = MongoClient("mongodb://localhost:27017/")
 db = client.bigstoremanager  # Create or connect to a database
@@ -37,11 +39,17 @@ def list_general(
 ):
     collection = db[collection_name]
     documents = []
-    # Retrieve all documents from the collection
-    for document in collection.find():
-        convert_object_ids_to_str(document)  # Convert ObjectId to string
-        documents.append(document)
-    return jsonify(documents)
+    try:
+        # Retrieve all documents from the collection
+        for document in collection.find():
+            convert_object_ids_to_str(document)  # Convert ObjectId to string
+            ##document = StatusUpdate(**document).model_dump()
+            documents.append(document)
+        return jsonify(documents)
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)})
 
 
 # Get a specific order by ID
@@ -54,11 +62,13 @@ def get_general(collection_name, obj_id):
 
         if document:
             convert_object_ids_to_str(document)
+            ##document = StatusUpdate(**document).model_dump()
             print(document)
             return document
         else:
             return jsonify({"error": "Document not found"})
     except Exception as e:
+        print(str(e))
         return jsonify({"error": str(e)})
 
 
@@ -67,10 +77,18 @@ def create_general(collection_name, body):
     """deletes a document with a body"""
     collection = db[collection_name]
     try:
+        model_dumo = body.model_dump()
+        if 'id' in model_dumo:
+            del model_dumo['id']
+            
+        print("TESSST")
+        print(model_dumo)
+        
         # Insert the document into the collection
-        result = collection.insert_one(jsonify(body))
+        result = collection.insert_one(model_dumo)
         return jsonify({"status": "Document added", "id": str(result.inserted_id)})
     except Exception as e:
+        print(e)
         return jsonify({"error": str(e)})
 
 
@@ -78,15 +96,21 @@ def create_general(collection_name, body):
 def update_general(collection_name, obj_id, body):
     """updated a document with _id, and body"""
     collection = db[collection_name]
+    
+    model_dumo = body.model_dump()
+    if 'id' in model_dumo:
+        del model_dumo['id']
+
     try:
         result = collection.update_one(
-            {"_id": ObjectId(obj_id)}, {"$set": jsonify(body)}
+            {"_id": ObjectId(obj_id)}, {"$set": model_dumo}
         )
 
         if result.matched_count == 0:
             return jsonify({"error": "Document not found"})
         return jsonify({"status": "Document updated"})
     except Exception as e:
+        print(str(e))
         return jsonify({"error": str(e)})
 
 
@@ -102,4 +126,5 @@ def delete_general(collection_name, obj_id):
             return jsonify({"error": "Document not found"})
         return jsonify({"status": "Document deleted"})
     except Exception as e:
+        print(str(e))
         return jsonify({"error": str(e)})

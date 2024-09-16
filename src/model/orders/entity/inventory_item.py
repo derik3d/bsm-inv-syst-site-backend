@@ -5,14 +5,17 @@ must have a serial number in order to be singular adn traceable
 
 """
 
-from pydantic import BaseModel
+from bson import ObjectId
+from pydantic import BaseModel, Field, field_validator
 from typing import Any, Dict, Optional
+
+from model.orders.entity.object_id import PyObjectId
 
 class InventoryItem(BaseModel):
     """Model for inventory item entity"""
     
     #---------------------------------------
-    id: str
+    id: Optional[str] = Field(default_factory=ObjectId, alias="_id")
     creation: float # timestamp
     
     #---------------------------------------
@@ -29,7 +32,19 @@ class InventoryItem(BaseModel):
     #---------------------------------------
 
     # try to have up to date order data, an inventory item just have one order
-    order_info: Optional[Dict[str, Any]] = None
+    order_info: Optional[str] = None
+
+
+    #---------------------------------------
+
+    @field_validator("id", mode="before", check_fields=False)
+    def convert_objectid_to_str(cls, v):
+        if isinstance(v, ObjectId):
+            return str(v)
+        return v
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+        populate_by_name = True
+        json_encoders = {ObjectId: str}
+        arbitrary_types_allowed=True
